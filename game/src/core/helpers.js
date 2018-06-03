@@ -4,9 +4,7 @@ import {
   WebGLRenderer,
   HemisphereLight,
   DirectionalLight,
-  CubeGeometry,
   MeshStandardMaterial,
-  MeshLambertMaterial,
   Mesh,
   PlaneGeometry,
   FaceColors,
@@ -50,17 +48,6 @@ export const createDirectionalLight = ({
   directionalLight.position.set(x, y, z);
   directionalLight.castShadow = castShadow;
   return directionalLight;
-};
-
-export const createPlayer = () => {
-  const playerGeometry = new CubeGeometry(1, 1, 1);
-  const playerMaterial = new MeshLambertMaterial({ color: 0xffffff * Math.random() });
-  const player = new Mesh(playerGeometry, playerMaterial);
-
-  player.position.set(0, 0, 0);
-  player.castShadow = true;
-  player.receiveShadow = true;
-  return player;
 };
 
 export const createGround = () => {

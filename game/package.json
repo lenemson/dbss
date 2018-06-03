@@ -1,7 +1,6 @@
 {
   "name": "game",
   "version": "0.0.1",
-  "private": true,
   "description": "Multiplayer browser game",
   "main": "src/index.js",
   "scripts": {
@@ -11,9 +10,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "lenemson",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "dependencies": {
-    "rxjs": "^6.2.0",
+    "socket.io-client": "^2.1.1",
     "three": "^0.90.0"
   },
   "devDependencies": {
