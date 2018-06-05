@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 
 export default class Socket {
   constructor() {
-    this.socket = io('http://dbe67de7.ngrok.io');
+    this.socket = io('http://localhost:4242');
   }
 
   spawn(player) {

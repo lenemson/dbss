@@ -1,14 +1,12 @@
-import { TextureLoader, AxesHelper } from 'three';
+import { TextureLoader } from 'three';
 import Socket from './Socket';
 import Inputs from './Inputs';
 import Player from './Player';
+import arena from '../maps/arena';
 import {
   createScene,
   createCamera,
   createRenderer,
-  createHemisphereLight,
-  createDirectionalLight,
-  createGround,
 } from './helpers';
 
 export default class Game {
@@ -17,12 +15,13 @@ export default class Game {
     this.scene = createScene(config.scene);
     this.camera = createCamera(config.camera);
     this.renderer = createRenderer(config.renderer);
-    this.textureLoader = new TextureLoader();
     this.socket = new Socket();
     this.inputs = new Inputs();
-    this.player = new Player();
+    this.map = arena(new TextureLoader());
     this.players = {};
-    this.objects = {};
+    this.entities = {
+      player: new Player(),
+    };
     this.startTime = null;
     this.state = {
       player: {
@@ -43,14 +42,6 @@ export default class Game {
   }
 
   start() {
-    this.objects = {
-      axesHelper: new AxesHelper(2),
-      ambient: createHemisphereLight(),
-      sun: createDirectionalLight(),
-      ground: createGround(this.textureLoader),
-      player: this.player.getEntity(),
-    };
-
     this.socket.socket.on('spawn', (player) => {
       const newPlayer = new Player(player.position);
       this.players[player.id] = newPlayer;
@@ -81,8 +72,9 @@ export default class Game {
       });
     });
 
-    this.socket.spawn(this.player);
-    Object.values(this.objects).forEach(object => this.scene.add(object));
+    Object.values(this.map).forEach(object => this.scene.add(object));
+    this.scene.add(this.entities.player.getEntity());
+    this.socket.spawn(this.entities.player);
     this.inputs.start();
     this.loop();
   }
@@ -95,11 +87,11 @@ export default class Game {
       down,
     } = this.inputs.state;
 
-    if (right) this.player.move(0.01 * delta, 0, 0);
-    if (left) this.player.move(-0.01 * delta, 0, 0);
-    if (up) this.player.move(0, 0.01 * delta, 0);
-    if (down) this.player.move(0, -0.01 * delta, 0);
-    if (right || left || up || down) this.socket.move(this.player);
+    if (right) this.entities.player.move(0.01 * delta, 0, 0);
+    if (left) this.entities.player.move(-0.01 * delta, 0, 0);
+    if (up) this.entities.player.move(0, 0.01 * delta, 0);
+    if (down) this.entities.player.move(0, -0.01 * delta, 0);
+    if (right || left || up || down) this.socket.move(this.entities.player);
   }
 
   loop(time) {
