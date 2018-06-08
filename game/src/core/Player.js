@@ -1,32 +1,42 @@
 import {
   Mesh,
-  Vector3,
   CubeGeometry,
   MeshLambertMaterial,
 } from 'three';
 
 export default class Player {
-  constructor(position = { x: 0, y: 0, z: 0 }) {
+  constructor({
+    id, x = 0, y = 0, z = 0, color = 0xffffff,
+  }) {
+    this.id = id;
     this.player = new Mesh(
       new CubeGeometry(1, 1, 1),
-      new MeshLambertMaterial({ color: 0xffffff * Math.random() }),
+      new MeshLambertMaterial({ color }),
     );
 
-    const { x, y, z } = position;
     this.player.position.set(x, y, z);
     this.player.castShadow = true;
     this.player.receiveShadow = true;
   }
 
-  getEntity() {
+  getId() {
+    return this.id;
+  }
+
+  getObject3D() {
     return this.player;
   }
 
-  move(x, y, z) {
-    this.player.position.add(new Vector3(x, y, z));
+  setPosition(x, y, z) {
+    this.player.position.set(x, y, z);
   }
 
-  moveTo(x, y, z) {
-    this.player.position.set(x, y, z);
+  update(delta, { serverState }) {
+    const playerState = serverState.players.find(({ id }) => id === this.getId());
+
+    if (playerState) {
+      const { x = 0, y = 0, z = 0 } = playerState;
+      this.setPosition(x, y, z);
+    }
   }
 }

@@ -18,80 +18,46 @@ export default class Game {
     this.socket = new Socket();
     this.inputs = new Inputs();
     this.map = arena(new TextureLoader());
-    this.players = {};
-    this.entities = {
-      player: new Player(),
-    };
     this.startTime = null;
     this.state = {
-      player: {
-        x: 0,
-        y: 0,
-        z: 0,
-        mouse: { x: 0, y: 0 },
+      serverState: {
+        players: [],
       },
-      camera: {
-        x: 0,
-        y: 0,
-        z: 10,
-        speed: 300,
-        distance: 5,
-        angle: 0,
-      },
+      inputs: this.inputs.state,
+      entities: {},
     };
   }
 
   start() {
-    this.socket.socket.on('spawn', (player) => {
-      const newPlayer = new Player(player.position);
-      this.players[player.id] = newPlayer;
-      this.scene.add(newPlayer.getEntity());
-    });
-
-    this.socket.socket.on('unspawn', (player) => {
-      this.scene.remove(this.players[player.id].getEntity());
-      delete this.players[player.id];
-    });
-
-    this.socket.socket.on('move', (player) => {
-      const { id, position: { x, y, z } } = player;
-      const playerMoving = this.players[id];
-
-      if (playerMoving) {
-        playerMoving.moveTo(x, y, z);
-      } else {
-        this.socket.getPlayers();
-      }
-    });
-
-    this.socket.socket.on('players', (players) => {
-      Object.values(players).forEach((player) => {
-        const newPlayer = new Player(player.position);
-        this.players[player.id] = newPlayer;
-        this.scene.add(newPlayer.getEntity());
-      });
-    });
-
+    this.socket.connect(this.state);
     Object.values(this.map).forEach(object => this.scene.add(object));
-    this.scene.add(this.entities.player.getEntity());
-    this.socket.spawn(this.entities.player);
     this.inputs.start();
     this.loop();
   }
 
   update(delta) {
     const {
-      right,
-      left,
-      up,
-      down,
-    } = this.inputs.state;
+      serverState,
+      entities,
+    } = this.state;
 
-    if (right) this.entities.player.move(0.01 * delta, 0, 0);
-    if (left) this.entities.player.move(-0.01 * delta, 0, 0);
-    if (up) this.entities.player.move(0, 0.01 * delta, 0);
-    if (down) this.entities.player.move(0, -0.01 * delta, 0);
-    if (right || left || up || down) this.socket.move(this.entities.player);
+    serverState.players.forEach((player) => {
+      if (!entities[player.id]) {
+        const newPlayer = new Player(player);
+        entities[player.id] = newPlayer;
+        this.scene.add(newPlayer.getObject3D());
+      }
+    });
+
+    Object.values(entities).forEach((entity) => {
+      const entityId = entity.getId();
+      if (!serverState.players.find(({ id }) => id === entityId)) {
+        this.scene.remove(entity);
+        delete entities[entityId];
+      } else {
+        entity.update(delta, this.state);
+      }
+    });
   }
 
   loop(time) {

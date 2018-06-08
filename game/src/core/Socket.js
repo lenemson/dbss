@@ -5,25 +5,18 @@ export default class Socket {
     this.socket = io('http://localhost:4242');
   }
 
-  spawn(player) {
-    const { x, y, z } = player.getEntity().position;
-    this.socket.emit('spawn', {
-      position: { x, y, z },
+  connect(gameState) {
+    this.socket.on('update', (serverState) => {
+      gameState.serverState = serverState;
     });
-  }
 
-  getPlayers() {
-    this.socket.emit('players');
-  }
+    // Ask server to spawn our player character.
+    this.socket.emit('spawn');
 
-  move(player) {
-    const { x, y, z } = player.getEntity().position;
-    this.socket.emit('move', {
-      position: { x, y, z },
-    });
-  }
-
-  emit(eventName, message) {
-    this.socket.emit(eventName, message);
+    // Send player inputs to server 60 times per seconds.
+    setInterval(
+      () => this.socket.emit('inputs', gameState.inputs),
+      1000 / 60,
+    );
   }
 }
