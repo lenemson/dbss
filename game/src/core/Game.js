@@ -1,4 +1,5 @@
 import { TextureLoader } from 'three';
+import State from './State';
 import Socket from './Socket';
 import Inputs from './Inputs';
 import Player from './Player';
@@ -15,45 +16,43 @@ export default class Game {
     this.scene = createScene(config.scene);
     this.camera = createCamera(config.camera);
     this.renderer = createRenderer(config.renderer);
+    this.state = new State();
     this.socket = new Socket();
     this.inputs = new Inputs();
     this.map = arena(new TextureLoader());
     this.startTime = null;
-    this.state = {
-      serverState: {
-        players: [],
-      },
-      inputs: this.inputs.state,
-      entities: {},
-    };
   }
 
   start() {
+    this.inputs.start(this.state);
     this.socket.connect(this.state);
     Object.values(this.map).forEach(object => this.scene.add(object));
-    this.inputs.start();
     this.loop();
   }
 
   update(delta) {
-    const {
-      serverState,
-      entities,
-    } = this.state;
+    const { state } = this;
 
-    serverState.players.forEach((player) => {
-      if (!entities[player.id]) {
-        const newPlayer = new Player(player);
-        entities[player.id] = newPlayer;
-        this.scene.add(newPlayer.getObject3D());
-      }
+    state.update();
+
+    // Add new players received from the server to
+    // the entity pool and the threejs scene.
+    state.getNewPlayers().forEach((player) => {
+      const entity = new Player(player);
+      state.addEntity(entity);
+      this.scene.add(entity.getObject3D());
+      state.removeNewPlayer(player.id);
     });
 
-    Object.values(entities).forEach((entity) => {
+    // Iterate through the entity pool to:
+    // - Update entities
+    // - Remove entities that are not in the server state
+    state.getEntities().forEach((entity) => {
       const entityId = entity.getId();
-      if (!serverState.players.find(({ id }) => id === entityId)) {
-        this.scene.remove(entity);
-        delete entities[entityId];
+      const players = state.getPlayers();
+      if (!players.find(({ id }) => id === entityId)) {
+        this.scene.remove(entity.getObject3D());
+        this.state.removeEntity(entityId);
       } else {
         entity.update(delta, this.state);
       }

@@ -6,16 +6,14 @@ export default class Socket {
   }
 
   connect(gameState) {
-    this.socket.on('update', (serverState) => {
-      gameState.serverState = serverState;
-    });
+    this.socket.on('update', gameState.setServerState.bind(gameState));
 
     // Ask server to spawn our player character.
     this.socket.emit('spawn');
 
     // Send player inputs to server 60 times per seconds.
     setInterval(
-      () => this.socket.emit('inputs', gameState.inputs),
+      () => this.socket.emit('inputs', gameState.getInputs()),
       1000 / 60,
     );
   }

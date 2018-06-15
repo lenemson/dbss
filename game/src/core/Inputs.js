@@ -9,15 +9,11 @@ const keyMap = {
 
 export default class Inputs {
   constructor() {
-    this.state = {
-      right: false,
-      left: false,
-      up: false,
-      down: false,
-    };
+    this.gameState = null;
   }
 
-  start() {
+  start(gameState) {
+    this.gameState = gameState;
     window.addEventListener('keyup', this.handleKeyUp.bind(this));
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
   }
@@ -29,11 +25,11 @@ export default class Inputs {
 
   handleKeyUp(event) {
     const key = keyMap[event.keyCode];
-    if (key) this.state[key] = false;
+    if (key && this.gameState) this.gameState.updateInputs({ [key]: false });
   }
 
   handleKeyDown(event) {
     const key = keyMap[event.keyCode];
-    if (key) this.state[key] = true;
+    if (key && this.gameState) this.gameState.updateInputs({ [key]: true });
   }
 }
