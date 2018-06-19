@@ -2,12 +2,12 @@ import { TextureLoader } from 'three';
 import State from './State';
 import Socket from './Socket';
 import Inputs from './Inputs';
-import Player from './Player';
 import arena from '../maps/arena';
 import {
   createScene,
   createCamera,
   createRenderer,
+  createEntity,
 } from './helpers';
 
 export default class Game {
@@ -35,26 +35,29 @@ export default class Game {
 
     state.update();
 
-    // Add new players received from the server to
+    // Add new entities received from the server to
     // the entity pool and the threejs scene.
-    state.getNewPlayers().forEach((player) => {
-      const entity = new Player(player);
-      state.addEntity(entity);
-      this.scene.add(entity.getObject3D());
-      state.removeNewPlayer(player.id);
+    state.getNewEntities().forEach((newEntity) => {
+      const entity = createEntity(newEntity);
+      if (entity) {
+        state.addEntity(entity);
+        this.scene.add(entity.getObject3D());
+      }
+      state.removeNewEntities(newEntity.id);
     });
 
     // Iterate through the entity pool to:
     // - Update entities
     // - Remove entities that are not in the server state
+    const serverEntities = state.getServerEntities();
     state.getEntities().forEach((entity) => {
       const entityId = entity.getId();
-      const players = state.getPlayers();
-      if (!players.find(({ id }) => id === entityId)) {
+      const serverEntity = serverEntities.find(({ id }) => id === entityId);
+      if (!serverEntity) {
         this.scene.remove(entity.getObject3D());
         this.state.removeEntity(entityId);
       } else {
-        entity.update(delta, this.state);
+        entity.update(delta, serverEntity, this.state);
       }
     });
   }

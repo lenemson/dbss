@@ -1,10 +1,10 @@
 export default class State {
   constructor() {
     this.serverState = {
-      players: [],
+      entities: [],
     };
     this.entities = {};
-    this.newPlayers = {};
+    this.newEntities = {};
     this.inputs = {
       right: false,
       left: false,
@@ -29,16 +29,16 @@ export default class State {
     delete this.entities[id];
   }
 
-  getPlayers() {
-    return Object.values(this.serverState.players);
+  getServerEntities() {
+    return Object.values(this.serverState.entities);
   }
 
-  getNewPlayers() {
-    return Object.values(this.newPlayers);
+  getNewEntities() {
+    return Object.values(this.newEntities);
   }
 
-  removeNewPlayer(id) {
-    delete this.newPlayers[id];
+  removeNewEntities(id) {
+    delete this.newEntities[id];
   }
 
   getInputs() {
@@ -50,10 +50,10 @@ export default class State {
   }
 
   update() {
-    const { players } = this.serverState;
-    players.forEach((player) => {
-      if (!this.entities[player.id]) {
-        this.newPlayers[player.id] = player;
+    const { entities: serverEntities } = this.serverState;
+    serverEntities.forEach((serverEntity) => {
+      if (!this.entities[serverEntity.id]) {
+        this.newEntities[serverEntity.id] = serverEntity;
       }
     });
   }

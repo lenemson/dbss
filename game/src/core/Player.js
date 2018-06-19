@@ -31,11 +31,9 @@ export default class Player {
     this.player.position.set(x, y, z);
   }
 
-  update(delta, gameState) {
-    const playerState = gameState.getPlayers().find(({ id }) => id === this.getId());
-
-    if (playerState) {
-      const { x = 0, y = 0, z = 0 } = playerState;
+  update(delta, newState) {
+    if (newState) {
+      const { x = 0, y = 0, z = 0 } = newState;
       this.setPosition(x, y, z);
     }
   }

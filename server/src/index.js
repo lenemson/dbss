@@ -22,7 +22,7 @@ const gameLoop = () => {
   currentTime = time;
   for (let i = 0; i < players.length; i++) tickPlayer(players[i], delta);
   ioServer.emit('update', {
-    players,
+    entities: [...players],
   });
 };
 
@@ -31,6 +31,7 @@ ioServer.on('connection', socket => {
 
   const currentPlayer = {
     id: socket.id,
+    type: 'player',
     x: 0,
     y: 0,
     z: 0,

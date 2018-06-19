@@ -10,6 +10,8 @@ import {
   FaceColors,
 } from 'three';
 
+import Player from './Player';
+
 export const createCamera = ({
   fov = 75, ratio, near = 0.1, far = 1000,
 }) => {
@@ -63,4 +65,14 @@ export const createGround = () => {
   plane.geometry.vertices.forEach(vertice => vertice.setZ(Math.random() * 0.1));
 
   return plane;
+};
+
+const entityTypes = {
+  player: Player,
+};
+
+export const createEntity = (entity) => {
+  const Entity = entityTypes[entity.type];
+  if (Entity) return new Entity(entity);
+  return null;
 };
