@@ -9,14 +9,14 @@ export default class Player {
     id, x = 0, y = 0, z = 0, color = 0xffffff,
   }) {
     this.id = id;
-    this.player = new Mesh(
+    this.object3D = new Mesh(
       new CubeGeometry(1, 1, 1),
       new MeshLambertMaterial({ color }),
     );
 
-    this.player.position.set(x, y, z);
-    this.player.castShadow = true;
-    this.player.receiveShadow = true;
+    this.object3D.position.set(x, y, z);
+    this.object3D.castShadow = true;
+    this.object3D.receiveShadow = true;
   }
 
   getId() {
@@ -24,11 +24,11 @@ export default class Player {
   }
 
   getObject3D() {
-    return this.player;
+    return this.object3D;
   }
 
   setPosition(x, y, z) {
-    this.player.position.set(x, y, z);
+    this.object3D.position.set(x, y, z);
   }
 
   update(delta, newState) {

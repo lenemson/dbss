@@ -1,16 +1,13 @@
 import {
-  PerspectiveCamera,
   Scene,
   WebGLRenderer,
-  HemisphereLight,
-  DirectionalLight,
-  MeshStandardMaterial,
-  Mesh,
-  PlaneGeometry,
-  FaceColors,
+  PerspectiveCamera,
 } from 'three';
 
-import Player from './Player';
+import Sun from '../entities/Sun';
+import Ground from '../entities/Ground';
+import Player from '../entities/Player';
+import AmbientLight from '../entities/AmbientLight';
 
 export const createCamera = ({
   fov = 75, ratio, near = 0.1, far = 1000,
@@ -34,41 +31,11 @@ export const createRenderer = ({
   return renderer;
 };
 
-export const createHemisphereLight = ({
-  skyColor = 0xfffafa, groundColor = 0x000000, intensity = 1,
-} = {}) =>
-  new HemisphereLight(skyColor, groundColor, intensity);
-
-export const createDirectionalLight = ({
-  color = 0xcdc1c5,
-  intensity = 1,
-  position: { x = 0, y = 0, z = 50 } = {},
-  castShadow = true,
-} = {}) => {
-  const directionalLight = new DirectionalLight(color, intensity);
-
-  directionalLight.position.set(x, y, z);
-  directionalLight.castShadow = castShadow;
-  return directionalLight;
-};
-
-export const createGround = () => {
-  const planeGeometry = new PlaneGeometry(10, 10, 20, 20);
-  const planeMaterial = new MeshStandardMaterial({
-    color: 0x7CFC00,
-    flatShading: true,
-    metalness: 0,
-    vertexColors: FaceColors,
-  });
-  const plane = new Mesh(planeGeometry, planeMaterial);
-
-  plane.geometry.vertices.forEach(vertice => vertice.setZ(Math.random() * 0.1));
-
-  return plane;
-};
-
 const entityTypes = {
+  sun: Sun,
+  ground: Ground,
   player: Player,
+  ambientLight: AmbientLight,
 };
 
 export const createEntity = (entity) => {

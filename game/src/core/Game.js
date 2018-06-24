@@ -1,8 +1,6 @@
-import { TextureLoader } from 'three';
 import State from './State';
 import Socket from './Socket';
 import Inputs from './Inputs';
-import arena from '../maps/arena';
 import {
   createScene,
   createCamera,
@@ -19,14 +17,12 @@ export default class Game {
     this.state = new State();
     this.socket = new Socket();
     this.inputs = new Inputs();
-    this.map = arena(new TextureLoader());
     this.startTime = null;
   }
 
   start() {
     this.inputs.start(this.state);
     this.socket.connect(this.state);
-    Object.values(this.map).forEach(object => this.scene.add(object));
     this.loop();
   }
 
