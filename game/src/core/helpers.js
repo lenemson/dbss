@@ -6,6 +6,7 @@ import {
 
 import Sun from '../entities/Sun';
 import Ground from '../entities/Ground';
+import Platform from '../entities/Platform';
 import Player from '../entities/Player';
 import AmbientLight from '../entities/AmbientLight';
 
@@ -14,7 +15,7 @@ export const createCamera = ({
 }) => {
   const camera = new PerspectiveCamera(fov, ratio, near, far);
 
-  camera.position.set(0, -20, 20);
+  camera.position.set(0, -50, 50);
   camera.lookAt(0, 0, 0);
   return camera;
 };
@@ -34,6 +35,7 @@ export const createRenderer = ({
 const entityTypes = {
   sun: Sun,
   ground: Ground,
+  platform: Platform,
   player: Player,
   ambientLight: AmbientLight,
 };

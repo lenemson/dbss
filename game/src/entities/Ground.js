@@ -7,11 +7,11 @@ import {
 
 export default class Ground {
   constructor({
-    id, color = 0xffffff,
+    id, color = 0xffffff, width = 10, height = 10
   }) {
     this.id = id;
     this.object3D = new Mesh(
-      new PlaneGeometry(10, 10, 20, 20),
+      new PlaneGeometry(width, height, 20, 20),
       new MeshStandardMaterial({
         color,
         flatShading: true,
