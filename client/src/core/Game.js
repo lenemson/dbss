@@ -18,6 +18,14 @@ export default class Game {
     this.socket = new Socket();
     this.inputs = new Inputs();
     this.startTime = null;
+
+    window.addEventListener('resize', this.handleResize.bind(this));
+  }
+
+  handleResize() {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
   start() {
