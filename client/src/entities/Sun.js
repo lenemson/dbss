@@ -2,9 +2,11 @@ import { DirectionalLight } from 'three';
 
 export default class Sun {
   constructor({
-    id, x = 0, y = 0, z = 50,
-    color = 0xcdc1c5, intensity = 1,
-    castShadow = true,
+    id, color = 0xcdc1c5,
+    intensity = 1, castShadow = true,
+    position: {
+      x = 0, y = 0, z = 50
+    }
   }) {
     this.id = id;
     this.object3D = new DirectionalLight(color, intensity);

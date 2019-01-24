@@ -2,6 +2,8 @@ import {
   Mesh,
   SphereGeometry,
   MeshLambertMaterial,
+  FaceColors,
+  Vector3,
 } from 'three';
 
 export default class Player {
@@ -10,9 +12,29 @@ export default class Player {
   }) {
     this.id = id;
     this.object3D = new Mesh(
-      new SphereGeometry(1, 20, 20),
-      new MeshLambertMaterial({ color }),
+      new SphereGeometry(1, 16, 16),
+      new MeshLambertMaterial({ vertexColors: FaceColors }),
     );
+
+    const faceLength = this.object3D.geometry.faces.length;
+    for (let i = 0; i < faceLength; i += 1) {
+      if (i < faceLength / 4) {
+        console.log(1, i);
+        this.object3D.geometry.faces[i].color.setHex(0xffffff);
+      }
+      else if (i < faceLength / 2) {
+        console.log(2, i);
+        this.object3D.geometry.faces[i].color.setHex(0x000000);
+      }
+      else if (i < faceLength * 0.75) {
+        console.log(3, i);
+        this.object3D.geometry.faces[i].color.setHex(0xffffff);
+      }
+      else {
+        console.log(4, i);
+        this.object3D.geometry.faces[i].color.setHex(0x000000);
+      }
+    }
 
     this.object3D.position.set(x, y, z);
     this.object3D.castShadow = true;
@@ -27,6 +49,10 @@ export default class Player {
     return this.object3D;
   }
 
+  getPosition() {
+    return this.object3D.position;
+  }
+
   setPosition(x, y, z) {
     this.object3D.position.set(x, y, z);
   }
@@ -37,9 +63,12 @@ export default class Player {
 
   update(delta, newState) {
     if (newState) {
-      const { position, quaternion } = newState;
+      const { position } = newState;
+      const direction = new Vector3(position.x, position.y, position.z)
+        .sub(this.object3D.position);
       this.setPosition(position.x, position.y, position.z);
-      //this.setOrientation(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+      this.object3D.rotation.x -= direction.y * 0.5;
+      this.object3D.rotation.y += direction.x * 0.5;
     }
   }
 }

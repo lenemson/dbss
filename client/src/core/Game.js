@@ -6,6 +6,7 @@ import {
   createCamera,
   createRenderer,
   createEntity,
+  createAxesHelper,
 } from './helpers';
 
 export default class Game {
@@ -18,7 +19,6 @@ export default class Game {
     this.socket = new Socket();
     this.inputs = new Inputs();
     this.startTime = null;
-
     window.addEventListener('resize', this.handleResize.bind(this));
   }
 
@@ -29,13 +29,17 @@ export default class Game {
   }
 
   start() {
+    this.camera.position.set(0, -50, 35);
+    this.camera.lookAt(0, 0, 0);
+    this.scene.add(createAxesHelper());
     this.inputs.start(this.state);
     this.socket.connect(this.state);
     this.loop();
   }
 
   update(delta) {
-    const { state } = this;
+    const { state, camera } = this;
+    const playerId = state.getPlayerId();
 
     state.update();
 
@@ -62,6 +66,19 @@ export default class Game {
         this.state.removeEntity(entityId);
       } else {
         entity.update(delta, serverEntity, this.state);
+
+        if (entityId === playerId) {
+          camera.position.set(
+            entity.getPosition().x,
+            entity.getPosition().y - 50,
+            entity.getPosition().z + 35,
+          );
+          camera.lookAt(
+            entity.getPosition().x,
+            entity.getPosition().y,
+            entity.getPosition().z,
+          );
+        }
       }
     });
   }

@@ -20,6 +20,10 @@ class Game {
         color: 0xffffff * Math.random(),
       });
 
+      socket.on('login', () => {
+        socket.emit('login', currentPlayer.id);
+      });
+
       socket.on('spawn', () => {
         this.players.push(currentPlayer);
         this.world.addBody(currentPlayer.getBody());

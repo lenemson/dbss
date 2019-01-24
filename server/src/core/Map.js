@@ -29,7 +29,7 @@ class Map {
       depth: 0.1,
       position: {
         x: 0,
-        y: 0,
+        y: 2,
         z: 10,
       }
     });

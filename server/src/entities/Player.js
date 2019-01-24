@@ -9,6 +9,7 @@ class Player {
       left: false,
       up: false,
       down: false,
+      direction: { x: 0, y: 0, z: 0 },
     };
     this.body = new cannon.Body({
       mass: 50,
@@ -39,21 +40,9 @@ class Player {
   }
 
   update() {
-    if (this.inputs.right) {
-      this.body.velocity.x = 15;
-    } else if (this.inputs.left) {
-      this.body.velocity.x = -15;
-    } else {
-      this.body.velocity.x = 0;
-    }
-
-    if (this.inputs.up) {
-      this.body.velocity.y = 15;
-    } else if (this.inputs.down) {
-      this.body.velocity.y = -15;
-    } else {
-      this.body.velocity.y = 0;
-    }
+    // TODO: Check max speed.
+    this.body.velocity.x = this.inputs.direction.x / 5;
+    this.body.velocity.y = this.inputs.direction.y / 5;
   }
 }
 

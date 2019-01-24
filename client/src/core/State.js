@@ -1,5 +1,6 @@
 export default class State {
   constructor() {
+    this.playerId = null;
     this.serverState = {
       entities: [],
     };
@@ -10,11 +11,20 @@ export default class State {
       left: false,
       up: false,
       down: false,
+      direction: { x: 0, y: 0, z: 0 },
     };
+  }
+
+  login(id) {
+    this.playerId = id;
   }
 
   setServerState(serverState) {
     this.serverState = serverState;
+  }
+
+  getPlayerId() {
+    return this.playerId;
   }
 
   getEntities() {
@@ -47,6 +57,10 @@ export default class State {
 
   updateInputs(inputs) {
     this.inputs = { ...this.inputs, ...inputs };
+  }
+
+  updateDirection([x, y, z]) {
+    this.inputs = { ...this.inputs, direction: { x, y, z } };
   }
 
   update() {

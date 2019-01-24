@@ -2,6 +2,7 @@ import {
   Scene,
   WebGLRenderer,
   PerspectiveCamera,
+  AxesHelper,
 } from 'three';
 
 import Sun from '../entities/Sun';
@@ -12,13 +13,7 @@ import AmbientLight from '../entities/AmbientLight';
 
 export const createCamera = ({
   fov = 75, ratio, near = 0.1, far = 1000,
-}) => {
-  const camera = new PerspectiveCamera(fov, ratio, near, far);
-
-  camera.position.set(0, -50, 50);
-  camera.lookAt(0, 0, 0);
-  return camera;
-};
+}) => new PerspectiveCamera(fov, ratio, near, far);
 
 export const createScene = () => new Scene();
 
@@ -30,6 +25,12 @@ export const createRenderer = ({
   renderer.setSize(width, height);
   if (clear) renderer.setClearColor(clear.color || 0xffffff, clear.alpha || 1);
   return renderer;
+};
+
+export const createAxesHelper = (size = 5, x = -25, y = -10, z = 0) => {
+  const axesHelper = new AxesHelper(size);
+  axesHelper.position.set(x, y, z);
+  return axesHelper;
 };
 
 const entityTypes = {
