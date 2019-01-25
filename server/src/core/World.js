@@ -9,16 +9,18 @@ class World {
   constructor() {
     this.world = new cannon.World();
     this.entities = [];
+    this.players = [];
     this.spawnPosition = { x: 0, y: 0, z: 0 };
 
     this.world.broadphase = new cannon.NaiveBroadphase();
   }
 
   /**
-   * Step the physics world forward in time.
+   * Update entities and step the physics world forward in time.
    * @param {number} delta - Time elapsed since last step.
    */
-  step(delta) {
+  update(delta) {
+    this.players.forEach(player => player.update());
     this.world.step(FIXED_TIME_STEP, delta, MAX_SUB_STEPS);
   }
 
@@ -37,14 +39,25 @@ class World {
   createEntity(entityData) {
     const entity = createEntity(entityData);
     if (!entity) return;
+    entity.addToWorld(this.world);
+    this.entities = [...this.entities, entity];
+
     if (entityData.type === 'spawn') {
       this.spawnPosition = {
         ...entityData.position,
         z: entityData.position.z + 1,
       };
     }
-    entity.addToWorld(this.world);
-    this.entities = [...this.entities, entity];
+
+    if (entityData.type === 'ground') {
+      entity.onCollide((e) => {
+        const groundedPlayer = this.players.find(
+          player => player.getBody().id === e.body.id
+        );
+
+        if (groundedPlayer) groundedPlayer.die();
+      });
+    }
   }
 
   check(level) {
@@ -53,12 +66,22 @@ class World {
     if (!level.entities) throw new Error('No entities');
   }
 
-  addBody(body) {
-    this.world.addBody(body);
+  addPlayer(player) {
+    player.setSpawn(this.spawnPosition);
+    player.addToWorld(this.world);
+    this.players = [...this.players, player];
+  }
+
+  removePlayer(player) {
+    player.removeFromWorld(this.world);
+    this.players = this.players.filter(p => p.getId() !== player.getId());
   }
 
   getEntities() {
-    return this.entities.map(entity => entity.toJSON());
+    return [
+      ...this.players.map(player => player.toJSON()),
+      ...this.entities.map(entity => entity.toJSON())
+    ];
   }
 
   getSpawnPosition() {

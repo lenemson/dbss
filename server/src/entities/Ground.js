@@ -29,6 +29,10 @@ class Ground {
     world.removeBody(this.body);
   }
 
+  onCollide(handleCollide) {
+    this.body.addEventListener('collide', handleCollide);
+  }
+
   toJSON() {
     return {
       id: this.id,

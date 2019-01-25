@@ -6,7 +6,6 @@ class Game {
   constructor(ioServer) {
     this.ioServer = ioServer;
     this.world = new World();
-    this.players = [];
     this.time = null;
 
     this.ioServer.on('connection', socket => {
@@ -14,17 +13,15 @@ class Game {
 
       const currentPlayer = new Player({
         id: socket.id,
-        position: this.world.getSpawnPosition(),
         color: 0xffffff * Math.random(),
       });
 
       socket.on('login', () => {
-        socket.emit('login', currentPlayer.id);
+        socket.emit('login', currentPlayer.getId());
       });
 
       socket.on('spawn', () => {
-        this.players.push(currentPlayer);
-        this.world.addBody(currentPlayer.getBody());
+        this.world.addPlayer(currentPlayer);
       });
 
       socket.on('inputs', inputs => {
@@ -33,7 +30,7 @@ class Game {
 
       socket.on('disconnect', () => {
         console.log('Client disconnected', socket.id);
-        this.players = this.players.filter(player => player.getId() !== currentPlayer.getId());
+        this.world.removePlayer(currentPlayer);
       });
     });
   }
@@ -47,12 +44,13 @@ class Game {
     const now = Date.now();
     if (!this.time) this.time = now;
     const delta = now - this.time;
+
     process.stdout.write(`~( ${delta} ms )~\r`);
+
     this.time = now;
-    this.players.forEach(player => player.update());
-    this.world.step(delta / 1000);
+    this.world.update(delta / 1000);
     this.ioServer.emit('update', {
-      entities: [...this.players.map(player => player.toJSON()), ...this.world.getEntities()],
+      entities: this.world.getEntities(),
     });
   }
 }
