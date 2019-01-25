@@ -1,11 +1,11 @@
 import State from './State';
 import Socket from './Socket';
 import Inputs from './Inputs';
+import { createEntity } from '../entities';
 import {
   createScene,
   createCamera,
   createRenderer,
-  createEntity,
   createAxesHelper,
 } from './helpers';
 

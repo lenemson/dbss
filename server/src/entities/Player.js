@@ -30,6 +30,14 @@ class Player {
     this.inputs = inputs;
   }
 
+  addToWorld(world) {
+    world.addBody(this.body);
+  }
+
+  removeFromWorld(world) {
+    world.removeBody(this.body);
+  }
+
   toJSON() {
     return {
       id: this.id,

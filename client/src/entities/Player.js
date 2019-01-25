@@ -19,19 +19,12 @@ export default class Player {
     const faceLength = this.object3D.geometry.faces.length;
     for (let i = 0; i < faceLength; i += 1) {
       if (i < faceLength / 4) {
-        console.log(1, i);
         this.object3D.geometry.faces[i].color.setHex(0xffffff);
-      }
-      else if (i < faceLength / 2) {
-        console.log(2, i);
+      } else if (i < faceLength / 2) {
         this.object3D.geometry.faces[i].color.setHex(0x000000);
-      }
-      else if (i < faceLength * 0.75) {
-        console.log(3, i);
+      } else if (i < faceLength * 0.75) {
         this.object3D.geometry.faces[i].color.setHex(0xffffff);
-      }
-      else {
-        console.log(4, i);
+      } else {
         this.object3D.geometry.faces[i].color.setHex(0x000000);
       }
     }
