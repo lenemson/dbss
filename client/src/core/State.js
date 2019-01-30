@@ -1,30 +1,39 @@
+import Cursors from './Cursors';
+
 export default class State {
-  constructor() {
-    this.playerId = null;
+  constructor({ renderer }) {
     this.serverState = {
       entities: [],
+      camera: {
+        position: {
+          x: 0, y: -50, z: 35,
+        },
+        lookAt: {
+          x: 0, y: 0, z: 0,
+        },
+      },
     };
     this.entities = {};
     this.newEntities = {};
+    this.camera = {};
+    this.cursors = new Cursors();
     this.inputs = {
+      isActive: false,
       right: false,
       left: false,
       up: false,
       down: false,
-      direction: { x: 0, y: 0, z: 0 },
+      cursorPosition: {
+        x: renderer.width / 2,
+        y: renderer.height / 2,
+      },
+      screenWidth: renderer.width,
+      screenHeight: renderer.height,
     };
-  }
-
-  login(id) {
-    this.playerId = id;
   }
 
   setServerState(serverState) {
     this.serverState = serverState;
-  }
-
-  getPlayerId() {
-    return this.playerId;
   }
 
   getEntities() {
@@ -51,20 +60,46 @@ export default class State {
     delete this.newEntities[id];
   }
 
+  getCamera() {
+    return this.camera;
+  }
+
+  setInputs(inputs) {
+    this.inputs = { ...this.inputs, ...inputs };
+  }
+
   getInputs() {
     return this.inputs;
   }
 
-  updateInputs(inputs) {
-    this.inputs = { ...this.inputs, ...inputs };
+  setCursor(cursorData) {
+    this.cursors.setCursor(
+      cursorData,
+      this.inputs.screenWidth,
+      this.inputs.screenHeight,
+    );
   }
 
-  updateDirection([x, y, z]) {
-    this.inputs = { ...this.inputs, direction: { x, y, z } };
+  setResolution(width, height) {
+    this.inputs = {
+      ...this.inputs,
+      screenWidth: width,
+      screenHeight: height,
+    };
+
+    if (this.handleResize) {
+      this.handleResize(width, height);
+    }
+  }
+
+  onResize(handleResize) {
+    this.handleResize = handleResize;
   }
 
   update() {
-    const { entities: serverEntities } = this.serverState;
+    const { entities: serverEntities, camera } = this.serverState;
+
+    if (camera) this.camera = camera;
     serverEntities.forEach((serverEntity) => {
       if (!this.entities[serverEntity.id]) {
         this.newEntities[serverEntity.id] = serverEntity;

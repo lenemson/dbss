@@ -1,36 +1,35 @@
 const World = require('./World');
-const Player = require('../entities/Player');
+const Group = require('./Group');
 const levelOne = require('../levels/one');
 
 class Game {
   constructor(ioServer) {
     this.ioServer = ioServer;
     this.world = new World();
+    this.group = new Group();
     this.time = null;
 
     this.ioServer.on('connection', socket => {
       console.log('Client connected', socket.id);
 
-      const currentPlayer = new Player({
-        id: socket.id,
-        color: 0xffffff * Math.random(),
-      });
+      const currentPlayerId = socket.id;
 
-      socket.on('login', () => {
-        socket.emit('login', currentPlayer.getId());
-      });
-
-      socket.on('spawn', () => {
-        this.world.addPlayer(currentPlayer);
-      });
+      this.group.addPlayer(currentPlayerId);
 
       socket.on('inputs', inputs => {
-        currentPlayer.setInputs(inputs);
+        this.group.setPlayerInputs(currentPlayerId, inputs);
+        socket.broadcast.emit('cursor', {
+          id: currentPlayerId,
+          isActive: inputs.isActive,
+          cursorPosition: inputs.cursorPosition,
+          screenWidth: inputs.screenWidth,
+          screenHeight: inputs.screenHeight,
+        });
       });
 
       socket.on('disconnect', () => {
         console.log('Client disconnected', socket.id);
-        this.world.removePlayer(currentPlayer);
+        this.group.removePlayer(currentPlayerId);
       });
     });
   }
@@ -48,10 +47,24 @@ class Game {
     process.stdout.write(`~( ${delta} ms )~\r`);
 
     this.time = now;
+    this.world.inputs(this.group.getGroupInputs());
     this.world.update(delta / 1000);
     this.ioServer.emit('update', {
       entities: this.world.getEntities(),
+      camera: this.processCameraView(),
     });
+  }
+
+  processCameraView() {
+    const characterPosition = this.world.getCharacterPosition();
+    return {
+      position: {
+        x: characterPosition.x,
+        y: characterPosition.y - 50,
+        z: characterPosition.z + 35,
+      },
+      lookAt: characterPosition,
+    };
   }
 }
 

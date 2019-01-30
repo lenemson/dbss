@@ -1,5 +1,3 @@
-const cannon = require('cannon');
-
 class AmbientLight {
   constructor({ id, skyColor, groundColor, intensity }) {
     this.id = id;

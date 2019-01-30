@@ -9,10 +9,14 @@ class World {
   constructor() {
     this.world = new cannon.World();
     this.entities = [];
-    this.players = [];
     this.spawnPosition = { x: 0, y: 0, z: 0 };
 
     this.world.broadphase = new cannon.NaiveBroadphase();
+    this.character = createEntity({ type: 'character', id: 'character0' });
+  }
+
+  inputs(groupInputs) {
+    this.character.inputs(groupInputs);
   }
 
   /**
@@ -20,7 +24,7 @@ class World {
    * @param {number} delta - Time elapsed since last step.
    */
   update(delta) {
-    this.players.forEach(player => player.update());
+    this.character.update();
     this.world.step(FIXED_TIME_STEP, delta, MAX_SUB_STEPS);
   }
 
@@ -34,6 +38,8 @@ class World {
     this.entities.forEach(entity => entity.removeFromWorld(this.world));
     this.entities = [];
     entities.forEach(this.createEntity.bind(this));
+    this.character.setSpawn(this.spawnPosition);
+    this.character.addToWorld(this.world);
   }
 
   createEntity(entityData) {
@@ -51,11 +57,7 @@ class World {
 
     if (entityData.type === 'ground') {
       entity.onCollide((e) => {
-        const groundedPlayer = this.players.find(
-          player => player.getBody().id === e.body.id
-        );
-
-        if (groundedPlayer) groundedPlayer.die();
+        if (this.character.getBody().id === e.body.id) this.character.die();
       });
     }
   }
@@ -66,26 +68,15 @@ class World {
     if (!level.entities) throw new Error('No entities');
   }
 
-  addPlayer(player) {
-    player.setSpawn(this.spawnPosition);
-    player.addToWorld(this.world);
-    this.players = [...this.players, player];
-  }
-
-  removePlayer(player) {
-    player.removeFromWorld(this.world);
-    this.players = this.players.filter(p => p.getId() !== player.getId());
-  }
-
   getEntities() {
     return [
-      ...this.players.map(player => player.toJSON()),
-      ...this.entities.map(entity => entity.toJSON())
+      ...this.entities.map(entity => entity.toJSON()),
+      this.character.toJSON(),
     ];
   }
 
-  getSpawnPosition() {
-    return this.spawnPosition;
+  getCharacterPosition() {
+    return this.character.getPosition();
   }
 }
 

@@ -1,5 +1,3 @@
-const cannon = require('cannon');
-
 class Sun {
   constructor({ id, color, intensity, castShadow, position }) {
     this.id = id;

@@ -6,9 +6,9 @@ import {
   Vector3,
 } from 'three';
 
-export default class Player {
+export default class Character {
   constructor({
-    id, x = 0, y = 0, z = 0, color = 0xffffff,
+    id, x = 0, y = 0, z = 0,
   }) {
     this.id = id;
     this.object3D = new Mesh(

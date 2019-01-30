@@ -3,7 +3,7 @@ import Game from './core/Game';
 const game = new Game({
   scene: {},
   camera: {
-    fov: 45,
+    fov: 50,
     ratio: window.innerWidth / window.innerHeight,
     near: 0.1,
     far: 1000,

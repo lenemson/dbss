@@ -1,14 +1,14 @@
 const AmbientLight = require('./AmbientLight');
+const Character = require('./Character');
 const Platform = require('./Platform');
-const Player = require('./Player');
 const Ground = require('./Ground');
 const Spawn = require('./Spawn');
 const Sun = require('./Sun');
 
 const entitiesByType = {
   ambientLight: AmbientLight,
+  character: Character,
   platform: Platform,
-  player: Player,
   ground: Ground,
   spawn: Spawn,
   sun: Sun,

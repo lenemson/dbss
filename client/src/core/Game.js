@@ -15,22 +15,21 @@ export default class Game {
     this.scene = createScene(config.scene);
     this.camera = createCamera(config.camera);
     this.renderer = createRenderer(config.renderer);
-    this.state = new State();
+    this.state = new State(config);
     this.socket = new Socket();
     this.inputs = new Inputs();
     this.startTime = null;
-    window.addEventListener('resize', this.handleResize.bind(this));
+
+    this.state.onResize(this.handleResize.bind(this));
   }
 
-  handleResize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
+  handleResize(width, height) {
+    this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(width, height);
   }
 
   start() {
-    this.camera.position.set(0, -50, 35);
-    this.camera.lookAt(0, 0, 0);
     this.scene.add(createAxesHelper());
     this.inputs.start(this.state);
     this.socket.connect(this.state);
@@ -39,9 +38,21 @@ export default class Game {
 
   update(delta) {
     const { state, camera } = this;
-    const playerId = state.getPlayerId();
 
     state.update();
+
+    const cameraState = state.getCamera();
+
+    camera.position.set(
+      cameraState.position.x,
+      cameraState.position.y,
+      cameraState.position.z,
+    );
+    camera.lookAt(
+      cameraState.lookAt.x,
+      cameraState.lookAt.y,
+      cameraState.lookAt.z,
+    );
 
     // Add new entities received from the server to
     // the entity pool and the threejs scene.
@@ -66,19 +77,6 @@ export default class Game {
         this.state.removeEntity(entityId);
       } else {
         entity.update(delta, serverEntity, this.state);
-
-        if (entityId === playerId) {
-          camera.position.set(
-            entity.getPosition().x,
-            entity.getPosition().y - 50,
-            entity.getPosition().z + 35,
-          );
-          camera.lookAt(
-            entity.getPosition().x,
-            entity.getPosition().y,
-            entity.getPosition().z,
-          );
-        }
       }
     });
   }
