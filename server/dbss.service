@@ -1,0 +1,16 @@
+[Unit]
+Description=Dbss game server
+
+[Service]
+ExecStart=/home/dbss/.nvm/versions/node/v10.15.3/bin/node /home/dbss/dbss-current/src/index.js
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=dbss
+User=dbss
+Group=dbss
+Environment=APP_ENV=production
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
