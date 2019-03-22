@@ -1,4 +1,4 @@
-### Game server
+# Game server
 
 ## Development
 
@@ -8,7 +8,7 @@
 
 `fly deploy:{staging|production}`
 
-# Remote server setup
+### Remote server setup
 
 Log in as `root` user, add an user with sudo:
 
@@ -37,7 +37,7 @@ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | b
 nvm install v10.15.3
 ```
 
-# Local setup
+### Local setup
 
 Create a `.env` file next to the `package.json` containing at least:
 
