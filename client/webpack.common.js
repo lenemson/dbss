@@ -3,12 +3,7 @@ const dotenv = require('dotenv');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const env = dotenv.config();
-
-if (env.error) {
-  console.error('.env file not found');
-  throw env.error;
-}
+dotenv.config();
 
 module.exports = {
   entry: './src/index.js',
