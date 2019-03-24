@@ -1,7 +1,7 @@
 {
-  "name": "server",
+  "name": "dbss-server",
   "version": "0.0.1",
-  "description": "Game server for GameOfBalls",
+  "description": "DBSS game server - Multiplayer browser game",
   "main": "src/index.js",
   "scripts": {
     "start": "PORT=4242 nodemon src/index",

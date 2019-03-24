@@ -1,7 +1,7 @@
 {
-  "name": "game",
+  "name": "dbss-client",
   "version": "0.0.1",
-  "description": "Multiplayer browser game",
+  "description": "DBSS game client - Multiplayer browser game",
   "main": "src/index.js",
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.dev.js",
@@ -12,6 +12,7 @@
   "author": "lenemson",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^7.0.0",
     "socket.io-client": "^2.1.1",
     "three": "^0.90.0"
   },
@@ -24,7 +25,7 @@
     "eslint-plugin-react": "^7.7.0",
     "html-webpack-plugin": "^3.0.4",
     "uglifyjs-webpack-plugin": "^1.2.2",
-    "webpack": "^4.1.0",
+    "webpack": "^4.29.6",
     "webpack-cli": "^2.0.10",
     "webpack-dev-server": "^3.1.0",
     "webpack-merge": "^4.1.2"

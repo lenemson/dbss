@@ -1,4 +1,4 @@
-# Game server
+# 🎲 Game server
 
 ## Development
 

@@ -9,7 +9,7 @@ module.exports = merge(common, {
     new UglifyJSPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
-      'process.env.DBSS_GAME_SERVER_HOST': JSON.stringify('http://163.172.187.32:4242'),
+      'process.env.DBSS_GAME_SERVER_HOST': JSON.stringify(process.env.DBSS_GAME_SERVER_HOST),
     }),
   ],
 });
