@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 
 export default class Socket {
   constructor() {
-    this.socket = io('http://localhost:4242');
+    this.socket = io(process.env.DBSS_GAME_SERVER_HOST);
   }
 
   connect(gameState) {

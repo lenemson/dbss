@@ -38,7 +38,7 @@ export default class Cursors {
 
     newDomCursor.style.width = '128px';
     newDomCursor.style.height = '128px';
-    newDomCursor.style.background = 'url(assets/cursors/magnet-blue.png) no-repeat top left';
+    newDomCursor.style.background = 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABjElEQVRYR2NkIBOoy9z/j6z15hNFRnKMIksTyKIBcwDMYjHJJ2APf/kM8fe3LzJgmtSQIDkEBswBMIu5+S6DffrvjxqYFhGF+OHt21dkhQTRITDgDoClcFwO+f6NHaykefpFMN1R3wSmz507h9eTRIfAoHEAukNg/NTqTSjFgJyMPFEhQXII0NwBsDgmNj8bGRmBS0S/qGCw23i4eUgKCYwQGDAHoBcwr56TVrKRGxLwEBgwB8As5uKBlO3CwmJg+ucvSMlG65BgHDQO4OT6CfYxE8stMP3/nyBK2c4tBknlhEo2WBbAlSbQywd4CGA6AJSdWBl+fBdl+PeXnYFmDkAvWGAOgZXtsBKO2JINpRBgYGCAhURUajxYCiMEBo0D0B0SWbCMrJKN7BAYNA4glIph8oTSBHrc49KHszYkt2hF9wAs8ZHsAHJDAqYP3eKh6wBiQwI99aPzv3z9AhbatGwtSolKdIuIUJqguQNwhQQhi2Hy6D6HiRMdAoPGAegOITYEcNWiJIcAtR0AAG/vVSyXsIyjAAAAAElFTkSuQmCC) no-repeat top left';
     newDomCursor.style.position = 'fixed';
     newDomCursor.style.top = `${y}px`;
     newDomCursor.style.left = `${x}px`;

@@ -28,6 +28,7 @@ export default class Inputs {
     window.removeEventListener('keydown', this.handleKeyDown.bind(this));
     window.removeEventListener('mousemove', this.handleMouseMove.bind(this));
     window.removeEventListener('resize', this.handleResize.bind(this));
+    window.removeEventListener('mouseout', this.handleMouseOut.bind(this));
   }
 
   handleKeyUp(event) {
