@@ -1,3 +1,11 @@
+const SPEED = 400;
+
+const computeVelocity = (pos, maxPos) => {
+  const translatedPos = pos - (maxPos / 2);
+  const normalizedPos = translatedPos / (maxPos / 2);
+  return normalizedPos * SPEED;
+};
+
 class Group {
   constructor() {
     this.players = {};
@@ -37,8 +45,8 @@ class Group {
 
     const playersDirections = activePlayers
       .map(player => ({
-        x: player.inputs.cursorPosition.x - (player.inputs.screenWidth / 2),
-        y: -(player.inputs.cursorPosition.y - (player.inputs.screenHeight / 2)),
+        x: computeVelocity(player.inputs.cursorPosition.x, player.inputs.screenWidth),
+        y: -computeVelocity(player.inputs.cursorPosition.y, player.inputs.screenHeight),
         z: 0,
       }));
 

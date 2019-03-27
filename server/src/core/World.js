@@ -2,8 +2,8 @@ const cannon = require('cannon');
 
 const { createEntity } = require('../entities');
 
-const FIXED_TIME_STEP = 1.0 / 60.0;
-const MAX_SUB_STEPS = 3;
+const FIXED_TIME_STEP = 1.0 / 100.0;
+const MAX_SUB_STEPS = 10;
 
 class World {
   constructor() {
@@ -11,7 +11,7 @@ class World {
     this.entities = [];
     this.spawnPosition = { x: 0, y: 0, z: 0 };
 
-    this.world.broadphase = new cannon.NaiveBroadphase();
+    this.world.broadphase = new cannon.SAPBroadphase(this.world);
     this.character = createEntity({ type: 'character', id: 'character0' });
   }
 
