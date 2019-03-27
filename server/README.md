@@ -42,7 +42,7 @@ nvm install v10.15.3
 Create a `.env` file next to the `package.json` containing at least:
 
 ```
-DBSS_STAGING_HOST=xxx.xxx.xxx.xxx
-DBSS_STAGING_USERNAME=dbss
-DBSS_STAGING_PK_PATH=/local/path/to/ssh/private/key
+DBSS_PRODUCTION_HOST=xxx.xxx.xxx.xxx
+DBSS_PRODUCTION_USERNAME=dbss
+DBSS_PRODUCTION_PK_PATH=/local/path/to/ssh/private/key
 ```

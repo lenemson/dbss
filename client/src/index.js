@@ -9,6 +9,7 @@ const game = new Game({
     far: 1000,
   },
   renderer: {
+    canvas: document.getElementById('canvas'),
     width: window.innerWidth,
     height: window.innerHeight,
     alpha: true,
@@ -16,5 +17,4 @@ const game = new Game({
   },
 });
 
-document.body.appendChild(game.renderer.domElement);
 game.start();

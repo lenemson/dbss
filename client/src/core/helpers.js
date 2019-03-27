@@ -12,9 +12,9 @@ export const createCamera = ({
 export const createScene = () => new Scene();
 
 export const createRenderer = ({
-  width = 800, height = 600, alpha = true, clear,
+  canvas, width = 800, height = 600, alpha = true, clear,
 }) => {
-  const renderer = new WebGLRenderer({ alpha });
+  const renderer = new WebGLRenderer({ canvas, alpha });
 
   renderer.setSize(width, height);
   if (clear) renderer.setClearColor(clear.color || 0xffffff, clear.alpha || 1);
