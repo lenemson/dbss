@@ -60,6 +60,14 @@ class World {
         if (this.character.getBody().id === e.body.id) this.character.die();
       });
     }
+
+    if (entityData.type === 'teleporter') {
+      entity.onCollide((e) => {
+        if (this.character.getBody().id === e.body.id) this.character.teleport(
+          entityData.teleportPosition,
+        );
+      });
+    }
   }
 
   check(level) {

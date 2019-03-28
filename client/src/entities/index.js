@@ -1,4 +1,5 @@
 import AmbientLight from './AmbientLight';
+import Teleporter from './Teleporter';
 import Character from './Character';
 import Platform from './Platform';
 import Ground from './Ground';
@@ -7,6 +8,7 @@ import Sun from './Sun';
 
 export const entitiesByType = {
   ambientLight: AmbientLight,
+  teleporter: Teleporter,
   character: Character,
   platform: Platform,
   ground: Ground,

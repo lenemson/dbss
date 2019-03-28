@@ -1,14 +1,15 @@
 const cannon = require('cannon');
 
-const COLOR = 0xf9a602;
+const COLOR = 0x0e99b8;
 const WIDTH = 6;
 const HEIGHT = 6;
 const DEPTH = 0.5;
 
-class Spawn {
-  constructor({ id, position }) {
+class Teleporter {
+  constructor({ id, position, teleportPosition }) {
     this.id = id;
     this.position = position;
+    this.teleportPosition = teleportPosition;
     this.body = new cannon.Body({
       mass: 0,
       position: new cannon.Vec3(position.x, position.y, position.z),
@@ -32,19 +33,24 @@ class Spawn {
     world.removeBody(this.body);
   }
 
+  onCollide(handleCollide) {
+    this.body.addEventListener('collide', handleCollide);
+  }
+
   toJSON() {
     return {
       id: this.id,
-      type: 'spawn',
+      type: 'teleporter',
       color: COLOR,
       width: WIDTH,
       height: HEIGHT,
       depth: DEPTH,
       position: this.body.position,
+      teleportPosition: this.teleportPosition,
     };
   }
 
   update() {}
 }
 
-module.exports = Spawn;
+module.exports = Teleporter;

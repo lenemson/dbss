@@ -202,5 +202,19 @@ module.exports = {
         z: 20,
       },
     },
+    {
+      id: 14,
+      type: 'teleporter',
+      position: {
+        x: 60,
+        y: -4,
+        z: 20.5,
+      },
+      teleportPosition: {
+        x: 0,
+        y: 0,
+        z: 25,
+      }
+    },
   ],
 };

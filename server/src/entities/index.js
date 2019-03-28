@@ -1,4 +1,5 @@
 const AmbientLight = require('./AmbientLight');
+const Teleporter = require('./Teleporter');
 const Character = require('./Character');
 const Platform = require('./Platform');
 const Ground = require('./Ground');
@@ -7,6 +8,7 @@ const Sun = require('./Sun');
 
 const entitiesByType = {
   ambientLight: AmbientLight,
+  teleporter: Teleporter,
   character: Character,
   platform: Platform,
   ground: Ground,

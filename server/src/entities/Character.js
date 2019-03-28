@@ -2,6 +2,7 @@ const cannon = require('cannon');
 
 const STATE_ALIVE = 'alive';
 const STATE_DEAD = 'dead';
+const STATE_TELEPORT = 'teleport';
 
 class Character {
   constructor({ id }) {
@@ -23,20 +24,34 @@ class Character {
   }
 
   update() {
-    if (this.state === STATE_DEAD) {
-      this.setPositionToSpawn();
-      this.state = STATE_ALIVE;
-    } else {
-      // TODO: Check max speed.
-      const { x, y } = this.direction;
-      this.body.velocity.x = x / 5;
-      this.body.velocity.y = y / 5;
-      this.direction = { x: 0, y: 0, z: 0 };
+    switch (this.state) {
+      case STATE_DEAD:
+        this.setPositionToSpawn();
+        this.state = STATE_ALIVE;
+        break;
+
+      case STATE_TELEPORT:
+        const to = this.teleportPosition || this.spawnPosition;
+        this.setPosition(to.x, to.y, to.z);
+        this.state = STATE_ALIVE;
+        break;
+
+      default:
+        // TODO: Check max speed.
+        const { x, y } = this.direction;
+        this.body.velocity.x = x / 5;
+        this.body.velocity.y = y / 5;
+        this.direction = { x: 0, y: 0, z: 0 };
     }
   }
 
   die() {
     this.state = STATE_DEAD;
+  }
+
+  teleport(position) {
+    this.state = STATE_TELEPORT;
+    this.teleportPosition = position;
   }
 
   getId() {
