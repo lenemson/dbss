@@ -11,7 +11,7 @@ module.exports = {
       position: {
         x: 0,
         y: 0,
-        z: 10,
+        z: 10.5,
       },
     },
     {
@@ -46,7 +46,7 @@ module.exports = {
       color: 0x8b4513,
       width: 20,
       height: 40,
-      depth: 0.1,
+      depth: 0.7,
       position: {
         x: 0,
         y: 15,
@@ -59,7 +59,7 @@ module.exports = {
       color: 0x8b4513,
       width: 30,
       height: 10,
-      depth: 1,
+      depth: 0.7,
       position: {
         x: -20,
         y: 27,
@@ -80,7 +80,7 @@ module.exports = {
       color: 0x8b4513,
       width: 20,
       height: 20,
-      depth: 1,
+      depth: 0.7,
       position: {
         x: -40,
         y: 25,
@@ -93,7 +93,7 @@ module.exports = {
       color: 0x8b4513,
       width: 23,
       height: 2,
-      depth: 1,
+      depth: 0.7,
       position: {
         x: -41.3,
         y: 20,
@@ -114,7 +114,7 @@ module.exports = {
       color: 0x8b4513,
       width: 10,
       height: 10,
-      depth: 1,
+      depth: 0.7,
       position: {
         x: -41,
         y: 16,
@@ -127,7 +127,7 @@ module.exports = {
       color: 0x8b4513,
       width: 5,
       height: 35,
-      depth: 1,
+      depth: 0.7,
       position: {
         x: -41,
         y: -5,
@@ -140,7 +140,7 @@ module.exports = {
       color: 0x8b4513,
       width: 50,
       height: 5,
-      depth: 1,
+      depth: 0.7,
       position: {
         x: -20,
         y: -25,
@@ -153,7 +153,7 @@ module.exports = {
       color: 0x8b4513,
       width: 25,
       height: 5,
-      depth: 1,
+      depth: 0.7,
       position: {
         x: 14.5,
         y: -25,
@@ -174,7 +174,7 @@ module.exports = {
       color: 0x8b4513,
       width: 25,
       height: 25,
-      depth: 1,
+      depth: 0.7,
       position: {
         x: 60,
         y: -25,
@@ -195,7 +195,7 @@ module.exports = {
       color: 0x8b4513,
       width: 15,
       height: 25,
-      depth: 1,
+      depth: 0.7,
       position: {
         x: 60,
         y: -10,

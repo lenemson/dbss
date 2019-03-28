@@ -55,7 +55,9 @@ export default class Inputs {
     this.gameState.setResolution(window.innerWidth, window.innerHeight);
   }
 
-  handleMouseOut() {
+  handleMouseOut(event) {
+    // Ignore mouseout triggered by other players cursor.
+    if (event.toElement.id === 'canvas') return;
     this.gameState.setInputs({ isActive: false });
   }
 }
