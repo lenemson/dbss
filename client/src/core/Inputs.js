@@ -57,7 +57,7 @@ export default class Inputs {
 
   handleMouseOut(event) {
     // Ignore mouseout triggered by other players cursor.
-    if (event.toElement.id === 'canvas') return;
+    if (event.toElement) return;
     this.gameState.setInputs({ isActive: false });
   }
 }
