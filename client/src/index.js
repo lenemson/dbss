@@ -15,6 +15,9 @@ const game = new Game({
     alpha: true,
     clear: { color: 0xfffafa, alpha: 1 },
   },
+  ui: {
+    rootElement: document.getElementById('ui'),
+  },
 });
 
 game.start();

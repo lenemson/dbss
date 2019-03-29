@@ -11,6 +11,23 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'build'),
   },
+  resolve: {
+    mainFields: ['svelte', 'browser', 'module', 'main'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.svelte$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'svelte-loader',
+          options: {
+            hotReload: true,
+          },
+        },
+      },
+    ],
+  },
   plugins: [
     new CleanWebpackPlugin(['build']),
     new HtmlWebpackPlugin({

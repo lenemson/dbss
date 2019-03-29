@@ -14,16 +14,19 @@ class Game {
 
       const currentPlayerId = socket.id;
 
-      this.group.addPlayer(currentPlayerId);
+      socket.on('login', username => {
+        const finalName = username || 'Unnamed player';
+        console.log(`${finalName} logged in [${socket.id}]`);
+        this.group.addPlayer(currentPlayerId, finalName);
+      });
 
       socket.on('inputs', inputs => {
         this.group.setPlayerInputs(currentPlayerId, inputs);
+        const player = this.group.getPlayer(currentPlayerId);
+        if (!player) return;
         socket.broadcast.emit('cursor', {
-          id: currentPlayerId,
-          isActive: inputs.isActive,
-          cursorPosition: inputs.cursorPosition,
-          screenWidth: inputs.screenWidth,
-          screenHeight: inputs.screenHeight,
+          username: player.username,
+          ...player.inputs,
         });
       });
 

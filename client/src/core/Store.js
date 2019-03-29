@@ -1,7 +1,9 @@
-import Cursors from './Cursors';
+const project = (sourcePoint, sourceMax, targetMax) =>
+  (sourcePoint / sourceMax) * targetMax;
 
-export default class State {
+export default class Store {
   constructor({ renderer }) {
+    this.isConnected = false;
     this.serverState = {
       entities: [],
       camera: {
@@ -16,7 +18,7 @@ export default class State {
     this.entities = {};
     this.newEntities = {};
     this.camera = {};
-    this.cursors = new Cursors();
+    this.cursors = {};
     this.inputs = {
       isActive: false,
       right: false,
@@ -29,6 +31,12 @@ export default class State {
       },
       screenWidth: renderer.width,
       screenHeight: renderer.height,
+    };
+    this.ui = {
+      username: '',
+      isConnected: false,
+      needLogin: false,
+      cursors: [],
     };
   }
 
@@ -73,11 +81,30 @@ export default class State {
   }
 
   setCursor(cursorData) {
-    this.cursors.setCursor(
-      cursorData,
-      this.inputs.screenWidth,
-      this.inputs.screenHeight,
-    );
+    if (!cursorData.isActive) {
+      delete this.cursors[cursorData.id];
+    } else {
+      this.cursors[cursorData.id] = {
+        ...cursorData,
+        x: project(
+          cursorData.cursorPosition.x,
+          cursorData.screenWidth,
+          this.inputs.screenWidth,
+        ),
+        y: project(
+          cursorData.cursorPosition.y,
+          cursorData.screenHeight,
+          this.inputs.screenHeight,
+        ),
+      };
+    }
+
+    this.ui = {
+      ...this.ui,
+      cursors: Object.values(this.cursors),
+    };
+
+    this.handleUiUpdate(this.ui);
   }
 
   setResolution(width, height) {
@@ -90,6 +117,49 @@ export default class State {
     if (this.handleResize) {
       this.handleResize(width, height);
     }
+  }
+
+  setUsername(username) {
+    this.ui = {
+      ...this.ui,
+      username,
+      needLogin: false,
+    };
+    this.handleLogin(username);
+    this.handleUiUpdate(this.ui);
+  }
+
+  getUsername() {
+    return this.username;
+  }
+
+  socketConnect() {
+    this.ui = {
+      ...this.ui,
+      isConnected: true,
+      needLogin: true,
+    };
+
+    this.handleUiUpdate(this.ui);
+  }
+
+  socketDisconnect() {
+    this.ui = {
+      ...this.ui,
+      isConnected: false,
+    };
+  }
+
+  getUiState() {
+    return this.ui;
+  }
+
+  onUiUpdate(handleUiUpdate) {
+    this.handleUiUpdate = handleUiUpdate;
+  }
+
+  onLoginNeeded(handleLogin) {
+    this.handleLogin = handleLogin;
   }
 
   onResize(handleResize) {

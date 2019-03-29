@@ -11,9 +11,10 @@ class Group {
     this.players = {};
   }
 
-  addPlayer(playerId) {
+  addPlayer(playerId, username) {
     this.players[playerId] = {
       id: playerId,
+      username,
       inputs: {
         isActive: false,
         right: false,
@@ -32,11 +33,20 @@ class Group {
   }
 
   setPlayerInputs(playerId, inputs) {
-    // // TODO: Inputs validations.
+    const player = this.players[playerId];
+
+    // Player not logged in.
+    if (!player || !player.username) return;
+
+    // TODO: Inputs validations.
     this.players[playerId] = {
-      ...this.players[playerId],
+      ...player,
       inputs: inputs,
     };
+  }
+
+  getPlayer(playerId) {
+    return this.players[playerId];
   }
 
   getGroupInputs() {

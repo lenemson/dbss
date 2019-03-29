@@ -10,12 +10,11 @@ const keyMap = {
 };
 
 export default class Inputs {
-  constructor() {
-    this.gameState = null;
+  constructor(gameStore) {
+    this.gameStore = gameStore;
   }
 
-  start(gameState) {
-    this.gameState = gameState;
+  start() {
     window.addEventListener('keyup', this.handleKeyUp.bind(this));
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     window.addEventListener('mousemove', this.handleMouseMove.bind(this));
@@ -33,16 +32,16 @@ export default class Inputs {
 
   handleKeyUp(event) {
     const key = keyMap[event.keyCode];
-    if (key && this.gameState) this.gameState.setInputs({ [key]: false });
+    if (key && this.gameStore) this.gameStore.setInputs({ [key]: false });
   }
 
   handleKeyDown(event) {
     const key = keyMap[event.keyCode];
-    if (key && this.gameState) this.gameState.setInputs({ [key]: true });
+    if (key && this.gameStore) this.gameStore.setInputs({ [key]: true });
   }
 
   handleMouseMove(event) {
-    this.gameState.setInputs({
+    this.gameStore.setInputs({
       isActive: true,
       cursorPosition: {
         x: event.clientX,
@@ -52,12 +51,12 @@ export default class Inputs {
   }
 
   handleResize() {
-    this.gameState.setResolution(window.innerWidth, window.innerHeight);
+    this.gameStore.setResolution(window.innerWidth, window.innerHeight);
   }
 
   handleMouseOut(event) {
     // Ignore mouseout triggered by other players cursor.
     if (event.toElement) return;
-    this.gameState.setInputs({ isActive: false });
+    this.gameStore.setInputs({ isActive: false });
   }
 }

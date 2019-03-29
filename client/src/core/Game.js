@@ -1,6 +1,7 @@
-import State from './State';
+import Store from './Store';
 import Socket from './Socket';
 import Inputs from './Inputs';
+import UI from './UI';
 import { createEntity } from '../entities';
 import {
   createScene,
@@ -15,12 +16,13 @@ export default class Game {
     this.scene = createScene(config.scene);
     this.camera = createCamera(config.camera);
     this.renderer = createRenderer(config.renderer);
-    this.state = new State(config);
-    this.socket = new Socket();
-    this.inputs = new Inputs();
+    this.store = new Store(config);
+    this.ui = new UI(this.store, config.ui);
+    this.inputs = new Inputs(this.store);
+    this.socket = new Socket(this.store);
     this.startTime = null;
 
-    this.state.onResize(this.handleResize.bind(this));
+    this.store.onResize(this.handleResize.bind(this));
   }
 
   handleResize(width, height) {
@@ -30,18 +32,32 @@ export default class Game {
   }
 
   start() {
-    this.scene.add(createAxesHelper());
-    this.inputs.start(this.state);
-    this.socket.connect(this.state);
+    if (process.env.NODE_ENV === 'development') {
+      this.scene.add(createAxesHelper());
+    }
+    this.ui.mount();
+    this.inputs.start();
+    this.socket.connect();
     this.loop();
   }
 
+  loop(time) {
+    requestAnimationFrame(this.loop.bind(this));
+
+    if (!this.startTime) this.startTime = time;
+    const delta = time - this.startTime;
+    this.startTime = time;
+
+    this.update(delta);
+    this.renderer.render(this.scene, this.camera);
+  }
+
   update(delta) {
-    const { state, camera } = this;
+    const { store, camera } = this;
 
-    state.update();
+    store.update();
 
-    const cameraState = state.getCamera();
+    const cameraState = store.getCamera();
 
     camera.position.set(
       cameraState.position.x,
@@ -56,39 +72,28 @@ export default class Game {
 
     // Add new entities received from the server to
     // the entity pool and the threejs scene.
-    state.getNewEntities().forEach((newEntity) => {
+    store.getNewEntities().forEach((newEntity) => {
       const entity = createEntity(newEntity);
       if (entity) {
-        state.addEntity(entity);
+        store.addEntity(entity);
         this.scene.add(entity.getObject3D());
       }
-      state.removeNewEntities(newEntity.id);
+      store.removeNewEntities(newEntity.id);
     });
 
     // Iterate through the entity pool to:
     // - Update entities
     // - Remove entities that are not in the server state
-    const serverEntities = state.getServerEntities();
-    state.getEntities().forEach((entity) => {
+    const serverEntities = store.getServerEntities();
+    store.getEntities().forEach((entity) => {
       const entityId = entity.getId();
       const serverEntity = serverEntities.find(({ id }) => id === entityId);
       if (!serverEntity) {
         this.scene.remove(entity.getObject3D());
-        this.state.removeEntity(entityId);
+        this.store.removeEntity(entityId);
       } else {
-        entity.update(delta, serverEntity, this.state);
+        entity.update(delta, serverEntity, this.store);
       }
     });
-  }
-
-  loop(time) {
-    requestAnimationFrame(this.loop.bind(this));
-
-    if (!this.startTime) this.startTime = time;
-    const delta = time - this.startTime;
-    this.startTime = time;
-
-    this.update(delta);
-    this.renderer.render(this.scene, this.camera);
   }
 }

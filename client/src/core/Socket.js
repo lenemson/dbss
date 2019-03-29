@@ -1,17 +1,27 @@
 import io from 'socket.io-client';
 
 export default class Socket {
-  constructor() {
-    this.socket = io(process.env.DBSS_GAME_SERVER_HOST);
+  constructor(gameStore) {
+    this.gameStore = gameStore;
+    this.socket = null;
   }
 
-  connect(gameState) {
-    this.socket.on('update', gameState.setServerState.bind(gameState));
-    this.socket.on('cursor', gameState.setCursor.bind(gameState));
+  connect() {
+    this.socket = io(process.env.DBSS_GAME_SERVER_HOST);
+
+    this.gameStore.onLoginNeeded(this.login.bind(this));
+    this.socket.on('connect', this.gameStore.socketConnect.bind(this.gameStore));
+    this.socket.on('disconnect', this.gameStore.socketDisconnect.bind(this.gameStore));
+    this.socket.on('update', this.gameStore.setServerState.bind(this.gameStore));
+    this.socket.on('cursor', this.gameStore.setCursor.bind(this.gameStore));
+  }
+
+  login(name) {
+    this.socket.emit('login', name);
 
     // Send player inputs to server 60 times per seconds.
     setInterval(
-      () => this.socket.emit('inputs', gameState.getInputs()),
+      () => this.socket.emit('inputs', this.gameStore.getInputs()),
       1000 / 60,
     );
   }
