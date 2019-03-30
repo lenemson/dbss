@@ -14,6 +14,7 @@ export default class Socket {
     this.socket.on('disconnect', this.gameStore.socketDisconnect.bind(this.gameStore));
     this.socket.on('update', this.gameStore.setServerState.bind(this.gameStore));
     this.socket.on('cursor', this.gameStore.setCursor.bind(this.gameStore));
+    this.socket.on('players', this.gameStore.setPlayers.bind(this.gameStore));
   }
 
   login(name) {

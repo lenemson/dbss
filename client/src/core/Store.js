@@ -37,6 +37,7 @@ export default class Store {
       isConnected: false,
       needLogin: false,
       cursors: [],
+      players: [],
     };
   }
 
@@ -107,6 +108,15 @@ export default class Store {
     this.handleUiUpdate(this.ui);
   }
 
+  setPlayers(players) {
+    this.ui = {
+      ...this.ui,
+      players,
+    };
+
+    this.handleUiUpdate(this.ui);
+  }
+
   setResolution(width, height) {
     this.inputs = {
       ...this.inputs,
@@ -148,6 +158,8 @@ export default class Store {
       ...this.ui,
       isConnected: false,
     };
+
+    this.handleUiUpdate(this.ui);
   }
 
   getUiState() {

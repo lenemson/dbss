@@ -14,10 +14,17 @@ class Game {
 
       const currentPlayerId = socket.id;
 
+      socket.emit('players', this.group.getPlayers());
+
       socket.on('login', username => {
-        const finalName = username || 'Unnamed player';
+        const MAX_LENGTH = 20;
+        const cleanUsername = username.trim();
+        const finalName = cleanUsername.length > MAX_LENGTH
+          ? `${cleanUsername.slice(0, MAX_LENGTH)}...`
+          : cleanUsername || 'Unnamed player';
         console.log(`${finalName} logged in [${socket.id}]`);
         this.group.addPlayer(currentPlayerId, finalName);
+        this.ioServer.emit('players', this.group.getPlayers());
       });
 
       socket.on('inputs', inputs => {
@@ -28,11 +35,13 @@ class Game {
           username: player.username,
           ...player.inputs,
         });
+        this.ioServer.emit('players', this.group.getPlayers());
       });
 
       socket.on('disconnect', () => {
         console.log('Client disconnected', socket.id);
         this.group.removePlayer(currentPlayerId);
+        this.ioServer.emit('players', this.group.getPlayers());
       });
     });
   }

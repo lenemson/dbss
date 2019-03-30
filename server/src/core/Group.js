@@ -68,6 +68,14 @@ class Group {
 
     return { direction };
   }
+
+  getPlayers() {
+    return Object.values(this.players)
+      .map(player => ({
+        username: player.username,
+        isActive: player.inputs.isActive,
+      }));
+  }
 }
 
 module.exports = Group;

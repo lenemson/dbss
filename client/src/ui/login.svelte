@@ -21,8 +21,8 @@
     width: 300px;
     background-color: white;
     border-radius: 5px;
-    border: 1px solid #ddd;
-    border-bottom: 3px solid #ddd;
+    border: 1px solid #a9a9a9;
+    border-bottom: 3px solid #a9a9a9;
     padding: 20px;
     position: fixed;
     left: 40%;
