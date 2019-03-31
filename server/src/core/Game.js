@@ -44,8 +44,6 @@ class Game {
         this.group.removePlayer(currentPlayerId);
         this.ioServer.emit('players', this.group.getPlayers());
         socket.broadcast.emit('cursor', {
-          ...player.inputs,
-          username: player.username,
           isActive: false,
         });
       });
@@ -62,7 +60,7 @@ class Game {
     if (!this.time) this.time = now;
     const delta = now - this.time;
 
-    process.stdout.write(`~( ${delta} ms )~\r`);
+    //process.stdout.write(`~( ${delta} ms )~\r`);
 
     this.time = now;
     this.world.inputs(this.group.getGroupInputs());
