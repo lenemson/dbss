@@ -21,9 +21,9 @@ module.exports = {
       intensity: 1,
       castShadow: true,
       position: {
-        x: 0,
+        x: 20,
         y: 0,
-        z: 50,
+        z: 100,
       },
     },
     {
@@ -36,9 +36,9 @@ module.exports = {
     {
       id: 3,
       type: 'ground',
-      width: 200,
-      height: 50,
-      color: 0x8b4513,
+      width: 1000,
+      height: 1000,
+      color: 0x006994,
     },
     {
       id: 4,

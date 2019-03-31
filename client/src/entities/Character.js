@@ -31,7 +31,7 @@ export default class Character {
 
     this.object3D.position.set(x, y, z);
     this.object3D.castShadow = true;
-    this.object3D.receiveShadow = true;
+    this.object3D.receiveShadow = false;
   }
 
   getId() {

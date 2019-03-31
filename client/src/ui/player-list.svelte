@@ -64,9 +64,6 @@
   import SocketStatus from './socket-status.svelte';
 
   export default {
-    onstate() {
-      console.log(this.get());
-    },
     data() {
       return {
         players: [],

@@ -2,6 +2,7 @@ import {
   Scene,
   WebGLRenderer,
   PerspectiveCamera,
+  PCFSoftShadowMap,
   AxesHelper,
 } from 'three';
 
@@ -15,6 +16,9 @@ export const createRenderer = ({
   canvas, width = 800, height = 600, alpha = true, clear,
 }) => {
   const renderer = new WebGLRenderer({ canvas, alpha });
+
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = PCFSoftShadowMap;
 
   renderer.setSize(width, height);
   if (clear) renderer.setClearColor(clear.color || 0xffffff, clear.alpha || 1);

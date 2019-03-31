@@ -156,6 +156,8 @@ export default class Store {
   socketDisconnect() {
     this.ui = {
       ...this.ui,
+      cursors: [],
+      players: [],
       isConnected: false,
     };
 
