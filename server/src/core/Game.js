@@ -32,16 +32,22 @@ class Game {
         const player = this.group.getPlayer(currentPlayerId);
         if (!player) return;
         socket.broadcast.emit('cursor', {
-          username: player.username,
           ...player.inputs,
+          username: player.username,
         });
         this.ioServer.emit('players', this.group.getPlayers());
       });
 
       socket.on('disconnect', () => {
         console.log('Client disconnected', socket.id);
+        const player = this.group.getPlayer(currentPlayerId);
         this.group.removePlayer(currentPlayerId);
         this.ioServer.emit('players', this.group.getPlayers());
+        socket.broadcast.emit('cursor', {
+          ...player.inputs,
+          username: player.username,
+          isActive: false,
+        });
       });
     });
   }
